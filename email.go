@@ -9,24 +9,25 @@ import (
 	"time"
 )
 
-// URLs to monitor
 var urls = []string{
-	"https://github.com/ShreeshailRH/CronjobURL./blob/main/email.go",
+	"https://github.com/ShreeshailRH/CronjobURL/blob/main/email.go",
 	"https://www.tutorialspoint.com/http/http_status_codes.htm",
-	"https://www.guvi.in/sqlkata/sql/2/2232",
+	"https://www.guvi.in/sqlkata/sql/2/",
 }
 
-// Threshold (seconds)
 const maxResponseSeconds = 2
 
-// Gmail SMTP
 const (
 	smtpHost      = "smtp.gmail.com"
 	smtpPort      = "587"
 	senderEmail   = "shreeshailrh92@gmail.com"
-	senderPass    = "xhme wdxw qucg bkmd" // app password
+	senderPass    = "xhme wdxw qucg bkmd" 
 	receiverEmail = "shreeshail@krazybee.com"
 )
+
+var httpClient = http.Client{
+	Timeout: 5 * time.Second,
+}
 
 func main() {
 	for _, link := range urls {
@@ -34,20 +35,16 @@ func main() {
 	}
 }
 
-// Check a single URL
 func checkURL(url string) {
 	start := time.Now()
-
-	resp, err := http.Get(url)
+	resp, err := httpClient.Get(url)
 	elapsed := time.Since(start).Seconds()
 
-	// If request completely failed
 	if err != nil {
 		saveToCSV(url, "DOWN", 0)
 		sendAlert(fmt.Sprintf("❌ URL DOWN: %s\nError: %v", url, err))
 		return
 	}
-
 	defer resp.Body.Close()
 
 	// Non-200 response
@@ -64,12 +61,11 @@ func checkURL(url string) {
 		return
 	}
 
-	// Everything OK
+	// OK (no email sent)
 	saveToCSV(url, "OK", elapsed)
-	sendAlert(fmt.Sprintf("✅ URL Working: %s\nResponse Time: %.2f sec", url, elapsed))
+	fmt.Println("OK:", url, elapsed)
 }
 
-// Send Email Alert
 func sendAlert(message string) {
 	auth := smtp.PlainAuth("", senderEmail, senderPass, smtpHost)
 
@@ -92,7 +88,6 @@ func sendAlert(message string) {
 	fmt.Println("EMAIL SENT:", message)
 }
 
-// Save results to CSV file
 func saveToCSV(url, status string, timeTaken float64) {
 	file, err := os.OpenFile("monitoring.csv", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -111,5 +106,7 @@ func saveToCSV(url, status string, timeTaken float64) {
 		fmt.Sprintf("%.2f", timeTaken),
 	}
 
-	writer.Write(row)
+	if err := writer.Write(row); err != nil {
+		fmt.Println("CSV WRITE ERROR:", err)
+	}
 }
