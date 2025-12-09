@@ -11,9 +11,9 @@ import (
 
 // URLs to monitor
 var urls = []string{
-	"https://bi.kreditbee.in/dashboard/monitoring_1",
-	"https://ops-kbnbfc-pmm.nammabee.com/",
-	"https://ops-prodyp-pmm.nammabee.com/",
+	"https://github.com/ShreeshailRH/CronjobURL./blob/main/email.go",
+	"https://www.tutorialspoint.com/http/http_status_codes.htm",
+	"https://www.guvi.in/sqlkata/sql/2/2232"
 }
 
 // Threshold (seconds)
