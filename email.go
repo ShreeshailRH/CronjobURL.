@@ -13,7 +13,7 @@ import (
 var urls = []string{
 	"https://github.com/ShreeshailRH/CronjobURL./blob/main/email.go",
 	"https://www.tutorialspoint.com/http/http_status_codes.htm",
-	"https://www.guvi.in/sqlkata/sql/2/2232"
+	"https://www.guvi.in/sqlkata/sql/2/2232",
 }
 
 // Threshold (seconds)
