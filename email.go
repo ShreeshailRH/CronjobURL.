@@ -22,7 +22,7 @@ const (
 	smtpPort      = "587"
 	senderEmail   = "shreeshailrh92@gmail.com"
 	senderPass    = "xhme wdxw qucg bkmd" 
-	receiverEmail = "shreeshail@krazybee.com"
+	receiverEmail = "shreeshailrh20@gamil.com"
 )
 
 var httpClient = http.Client{
